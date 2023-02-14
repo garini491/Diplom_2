@@ -9,17 +9,15 @@ import user.User;
 import user.UserClient;
 import user.UserData;
 
-
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.*;
 
 public class OrderCreateTest {
-    OrderClient orderClient;
-    User user;
-    UserClient userClient;
-    String bearerToken;
-    Order order;
-
+    private OrderClient orderClient;
+    private User user;
+    private UserClient userClient;
+    private String bearerToken;
+    private Order order;
 
     @Before
     public void setUp() {
@@ -34,33 +32,36 @@ public class OrderCreateTest {
     @Description("Проверка создания заказа с авторизацией и переданными ингредиентами")
     public void orderCreateWithAuthTest() {
         order.setIngredients(new String[]{"61c0c5a71d1f82001bdaaa6d", "61c0c5a71d1f82001bdaaa70"});
-        ValidatableResponse response = orderClient.createOrderWithAuth(order,bearerToken);
+        ValidatableResponse response = orderClient.createOrderWithAuth(order, bearerToken);
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
-        assertEquals(SC_OK,statusCode);
+        assertEquals(SC_OK, statusCode);
         assertTrue(success);
     }
+
     @Test
     @Description("Проверка создания заказа с авторизацией, без ингредиентов")
     public void orderCreateWithoutIngredientsWithAuthTest() {
         order.setIngredients(new String[]{});
-        ValidatableResponse response = orderClient.createOrderWithAuth(order,bearerToken);
+        ValidatableResponse response = orderClient.createOrderWithAuth(order, bearerToken);
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
         String expectedMessage = "Ingredient ids must be provided";
         String actualMessage = response.extract().path("message");
-        assertFalse(success);
-        assertEquals(expectedMessage,actualMessage);
         assertEquals(SC_BAD_REQUEST, statusCode);
+        assertFalse(success);
+        assertEquals(expectedMessage, actualMessage);
     }
+
     @Test
     @Description("Проверка создания заказа с авторизацией, с некоректным хэшем")
     public void orderCreateNotValidIngredientWithAuthTest() {
         order.setIngredients(new String[]{"12348"});
-        ValidatableResponse response = orderClient.createOrderWithAuth(order,bearerToken);
+        ValidatableResponse response = orderClient.createOrderWithAuth(order, bearerToken);
         int statusCode = response.extract().statusCode();
         assertEquals(SC_INTERNAL_SERVER_ERROR, statusCode);
     }
+
     @Test
     @Description("Проверка создания заказа без авторизации и переданными ингредиентами")
     public void orderCreateWithoutAuthTest() {
@@ -68,9 +69,10 @@ public class OrderCreateTest {
         ValidatableResponse response = orderClient.createOrderWithoutAuth(order);
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
-        assertEquals(SC_OK,statusCode);
+        assertEquals(SC_OK, statusCode);
         assertTrue(success);
     }
+
     @Test
     @Description("Проверка создания заказа с авторизацией, без ингредиентов")
     public void orderCreateWithoutIngredientsWithoutAuthTest() {
@@ -80,10 +82,11 @@ public class OrderCreateTest {
         int statusCode = response.extract().statusCode();
         String expectedMessage = "Ingredient ids must be provided";
         String actualMessage = response.extract().path("message");
-        assertFalse(success);
-        assertEquals(expectedMessage,actualMessage);
         assertEquals(SC_BAD_REQUEST, statusCode);
+        assertFalse(success);
+        assertEquals(expectedMessage, actualMessage);
     }
+
     @Test
     @Description("Проверка создания заказа с авторизацией, с некоректным хэшем")
     public void orderCreateNotValidIngredientWithoutAuthTest() {

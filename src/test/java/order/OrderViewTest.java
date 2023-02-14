@@ -14,12 +14,11 @@ import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static org.junit.Assert.*;
 
 public class OrderViewTest {
-
-    User user;
-    Order order;
-    UserClient userClient;
-    OrderClient orderClient;
-    String bearerToken;
+    private User user;
+    private Order order;
+    private UserClient userClient;
+    private OrderClient orderClient;
+    private String bearerToken;
 
     @Before
     public void setUp() {
@@ -28,7 +27,7 @@ public class OrderViewTest {
         userClient = new UserClient();
         user = UserData.getDefoultUser();
         bearerToken = userClient.register(user).extract().path("accessToken");
-        orderClient.createOrderWithAuth(order,bearerToken);
+        orderClient.createOrderWithAuth(order, bearerToken);
     }
 
     @Test
@@ -37,9 +36,10 @@ public class OrderViewTest {
         ValidatableResponse response = orderClient.getUserOrder(bearerToken);
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
-        assertEquals(SC_OK,statusCode);
+        assertEquals(SC_OK, statusCode);
         assertTrue(success);
     }
+
     @Test
     @Description("Получение заказа конкретного пользователя без авторизации")
     public void getOrderWithoutAuth() {
@@ -48,10 +48,11 @@ public class OrderViewTest {
         int statusCode = response.extract().statusCode();
         String expected = "You should be authorised";
         String actual = response.extract().path("message");
-        assertEquals(SC_UNAUTHORIZED,statusCode);
+        assertEquals(SC_UNAUTHORIZED, statusCode);
         assertFalse(success);
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
     }
+
     @After
     public void tearDown() {
         userClient.delete(bearerToken);

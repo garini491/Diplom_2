@@ -5,10 +5,7 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import static org.apache.http.HttpStatus.SC_FORBIDDEN;
-
-
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.*;
 
@@ -30,11 +27,11 @@ public class UserRegisterTest {
         bearerToken = response.extract().path("accessToken");
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
-        assertEquals(SC_OK,statusCode);
+        assertEquals(SC_OK, statusCode);
         assertTrue(success);
-
         userClient.delete(bearerToken);
     }
+
     @Test
     @Description("Регистрация пользователя без email")
     public void userWithoutEmailRegistration() {
@@ -44,10 +41,11 @@ public class UserRegisterTest {
         String actualMessage = response.extract().path("message");
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
-        assertEquals(SC_FORBIDDEN,statusCode);
+        assertEquals(SC_FORBIDDEN, statusCode);
         assertFalse(success);
-        assertEquals(expectedMessage,actualMessage);
+        assertEquals(expectedMessage, actualMessage);
     }
+
     @Test
     @Description("Регистрация пользователя без пароля")
     public void userWithoutPassRegistration() {
@@ -57,10 +55,11 @@ public class UserRegisterTest {
         String actualMessage = response.extract().path("message");
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
-        assertEquals(SC_FORBIDDEN,statusCode);
+        assertEquals(SC_FORBIDDEN, statusCode);
         assertFalse(success);
-        assertEquals(expectedMessage,actualMessage);
+        assertEquals(expectedMessage, actualMessage);
     }
+
     @Test
     @Description("Регистрация пользователя без имени")
     public void userWithoutNameRegistration() {
@@ -70,10 +69,11 @@ public class UserRegisterTest {
         String actualMessage = response.extract().path("message");
         boolean success = response.extract().path("success");
         int statusCode = response.extract().statusCode();
-        assertEquals(SC_FORBIDDEN,statusCode);
+        assertEquals(SC_FORBIDDEN, statusCode);
         assertFalse(success);
-        assertEquals(expectedMessage,actualMessage);
+        assertEquals(expectedMessage, actualMessage);
     }
+
     @Test
     @Description("Регистрация неуникального пользователя")
     public void notUniqueUserRegistration() {
@@ -84,10 +84,9 @@ public class UserRegisterTest {
         int statusCode = response.extract().statusCode();
         String expectedMessage = "User already exists";
         String actualMessage = response.extract().path("message");
-        assertEquals(SC_FORBIDDEN,statusCode);
+        assertEquals(SC_FORBIDDEN, statusCode);
         assertFalse(success);
-        assertEquals(expectedMessage,actualMessage);
-
+        assertEquals(expectedMessage, actualMessage);
         userClient.delete(bearerToken);
     }
 }

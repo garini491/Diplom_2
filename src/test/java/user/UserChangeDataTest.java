@@ -11,10 +11,10 @@ import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static org.junit.Assert.*;
 
 public class UserChangeDataTest {
-    User user;
-    User uniqueUser;
-    UserClient userClient;
-    String bearerToken;
+    private User user;
+    private UserClient userClient;
+    private String bearerToken;
+
     @Before
     public void setUp() {
         userClient = new UserClient();
@@ -32,10 +32,11 @@ public class UserChangeDataTest {
         String actualMessage = updateResponse.extract().path("message");
         String expectedMessage = "You should be authorised";
         int statusCode = updateResponse.extract().statusCode();
-        assertFalse("Изменения не должны были пройти: ",success);
-        assertEquals(expectedMessage,actualMessage);
+        assertFalse("Изменения не должны были пройти: ", success);
+        assertEquals(expectedMessage, actualMessage);
         assertEquals(SC_UNAUTHORIZED, statusCode);
     }
+
     @Test
     @Description("Изменение email без авторизации")
     public void userEmailUpdateWithoutAuth() {
@@ -45,8 +46,8 @@ public class UserChangeDataTest {
         String actualMessage = updateResponse.extract().path("message");
         String expectedMessage = "You should be authorised";
         int statusCode = updateResponse.extract().statusCode();
-        assertFalse("Изменения не должны были пройти: ",success);
-        assertEquals(expectedMessage,actualMessage);
+        assertFalse("Изменения не должны были пройти: ", success);
+        assertEquals(expectedMessage, actualMessage);
         assertEquals(SC_UNAUTHORIZED, statusCode);
     }
 
@@ -59,10 +60,11 @@ public class UserChangeDataTest {
         String actualMessage = updateResponse.extract().path("message");
         String expectedMessage = "You should be authorised";
         int statusCode = updateResponse.extract().statusCode();
-        assertFalse("Изменения не должны были пройти: ",success);
-        assertEquals(expectedMessage,actualMessage);
+        assertFalse("Изменения не должны были пройти: ", success);
+        assertEquals(expectedMessage, actualMessage);
         assertEquals(SC_UNAUTHORIZED, statusCode);
     }
+
     @Test
     @Description("Изменение всех данных с авторизацией")
     public void userAllUpdateWithAuth() {
@@ -74,11 +76,12 @@ public class UserChangeDataTest {
         String newEmail = userInfoResponse.extract().path("user.email");
         String newName = userInfoResponse.extract().path("user.name");
         int statusCode = updateResponse.extract().statusCode();
-        assertEquals(SC_OK,statusCode);
-        assertTrue("Изменения не прошли: ",success);
-        assertEquals("Email не изменен: ",user.getEmail(),newEmail);
-        assertEquals("Имя не изменено: ",user.getName(), newName);
+        assertEquals(SC_OK, statusCode);
+        assertTrue("Изменения не прошли: ", success);
+        assertEquals("Email не изменен: ", user.getEmail(), newEmail);
+        assertEquals("Имя не изменено: ", user.getName(), newName);
     }
+
     @Test
     @Description("Изменение email с авторизацией")
     public void userEmailUpdateWithAuth() {
@@ -88,9 +91,9 @@ public class UserChangeDataTest {
         boolean success = updateResponse.extract().path("success");
         String newEmail = userInfoResponse.extract().path("user.email");
         int statusCode = updateResponse.extract().statusCode();
-        assertEquals(SC_OK,statusCode);
-        assertTrue("Изменения не прошли: ",success);
-        assertEquals("Email не изменен: ",user.getEmail(),newEmail);
+        assertEquals(SC_OK, statusCode);
+        assertTrue("Изменения не прошли: ", success);
+        assertEquals("Email не изменен: ", user.getEmail(), newEmail);
     }
 
     @Test
@@ -102,9 +105,9 @@ public class UserChangeDataTest {
         boolean success = updateResponse.extract().path("success");
         String newName = userInfoResponse.extract().path("user.name");
         int statusCode = updateResponse.extract().statusCode();
-        assertEquals(SC_OK,statusCode);
-        assertTrue("Изменения не прошли: ",success);
-        assertEquals("Имя не изменено: ",user.getName(), newName);
+        assertEquals(SC_OK, statusCode);
+        assertTrue("Изменения не прошли: ", success);
+        assertEquals("Имя не изменено: ", user.getName(), newName);
     }
 
     @After
